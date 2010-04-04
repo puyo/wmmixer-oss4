@@ -5,18 +5,24 @@ exec_prefix = ${prefix}
 bindir      = ${exec_prefix}/bin
 mandir      = ${prefix}/share/man
 
-DESTDIR     =
+DESTDIR     = 
 
-CXX	    = g++
-CXXFLAGS    = -O -Wall
-EXTRA_LIBS  = -L/usr/X11R6/lib -lX11 -lXpm -lXext
+CXX        = g++
+CXXFLAGS   = -O -Wall -Wno-write-strings -Wno-unused-variable
+EXTRA_LIBS = -L/usr/X11R6/lib -lX11 -lXpm -lXext
 
+#ifdef OSS3 # e.g. OSS3=1 make
+CXXFLAGS += -I/usr/include
+#else
+CXXFLAGS += -I/usr/lib/oss/include # debian package 'oss-linux'
+#endif
+CXXFLAGS += ${EXTRA_CXXFLAGS}
 
-LD 	    = g++
-LDFLAGS     = -o $(EXECUTABLE) $(EXTRA_LIBDIRS) $(EXTRA_LIBS) $(CXXFLAGS)
+LD         = g++
+LDFLAGS    = -o $(EXECUTABLE) $(EXTRA_LIBDIRS) $(EXTRA_LIBS) $(CXXFLAGS)
 
-EXECUTABLE  = wmmixer
-OBJS	    = xhandler.o mixctl.o wmmixer.o exception.o
+EXECUTABLE = wmmixer
+OBJS       = xhandler.o mixer.o wmmixer.o exception.o
 
 INSTALL = install
 INSTALL_FILE    = $(INSTALL) -D -p    -o root -g root  -m  644

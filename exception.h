@@ -12,29 +12,22 @@
 #ifndef __exception_h__
 #define __exception_h__
 
-#include <stdlib.h>
-#include <string.h>
+#include <string>
 
 //--------------------------------------------------------------------
-class Exception
-{
- protected:
-  char* error_message_;
-  
- public:
-  Exception();
-  Exception(const Exception&);
-  virtual ~Exception();
-  char* getErrorMessage() const;
+class Exception {
+public:
+    const char* getMessage() const;
+
+protected:
+    std::string message;
 };
 
 
 //--------------------------------------------------------------------
-class MixerDeviceException : public Exception
-{
- public:
-  MixerDeviceException(char *);
-  //  virtual ~MixerDeviceException();
+class MixerException : public Exception {
+public:
+    MixerException(const char *device, const char *msg);
 };
 
-#endif _exception_h__
+#endif

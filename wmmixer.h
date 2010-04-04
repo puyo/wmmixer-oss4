@@ -10,21 +10,17 @@
 
 
 #ifndef __wmmixer_h__
-#define __wmmixer_h_
+#define __wmmixer_h__
 
-// Input/Output
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <getopt.h>
-
 #include <iostream>
-
+#include <string>
 #include <X11/X.h>
-
-// WMMixer
-#include "mixctl.h"
+#include "mixer.h"
 #include "xhandler.h"
 #include "common.h"
 #include "exception.h"
@@ -33,55 +29,53 @@
 #define RPTINTERVAL   5
 
 
-class WMMixer
-{
- protected:
+class WMMixer {
+public:
+    WMMixer();
+    ~WMMixer();
 
-  // Mixer
-  MixCtl *mixctl_;
+    void init(int, char **);
+    void loop();
 
-  char     mixer_device_[256];
-  unsigned num_channels_;
-  unsigned current_channel_;
-  unsigned current_channel_left_;
-  unsigned current_channel_right_;
-  bool     current_recording_;
-  bool     current_show_recording_;
+private:
+    // Mixer
+    Mixer *mixer;
 
-  XHandler *xhandler_;
+    std::string mixer_device;
+    unsigned num_channels;
+    unsigned current_channel;
+    unsigned current_channel_left;
+    unsigned current_channel_right;
+    bool     current_recording;
+    bool     current_show_recording;
 
-  unsigned *channel_list_;
+    XHandler *xhandler;
 
-  int repeat_timer_;
+    unsigned *channel_list;
 
-  // For draggable volume control
-  bool dragging_;
-// Default scroll amount
-  int wheel_scroll_;
+    int repeat_timer;
 
-  // Input/Output
-  void readConfigurationFile();
-  void displayVersion(void);
-  void displayUsage(const char*);
-  void checkVol(bool);
+    // For draggable volume control
+    bool dragging;
 
-  void motionEvent(XMotionEvent *xev);
-  void releaseEvent(XButtonEvent *xev);
-  void pressEvent(XButtonEvent *xev);
-  void parseArgs(int , char **);
+    // Default scroll amount
+    int wheel_scroll;
 
-  void initMixer();
-  void initXHandler();
+    // Input/Output
+    void readConfigurationFile();
+    void displayVersion(void);
+    void displayUsage(const char*);
+    void checkVol(bool);
 
-  void updateDisplay();
+    void motionEvent(XMotionEvent *xev);
+    void releaseEvent(XButtonEvent *xev);
+    void pressEvent(XButtonEvent *xev);
+    void parseArgs(int , char **);
 
- public:
-  WMMixer();
-  ~WMMixer();
+    void initMixer();
+    void initXHandler();
 
-  void init(int, char **);
-  void loop();
+    void updateDisplay();
 };
-
 
 #endif //__wmmixer_h__
